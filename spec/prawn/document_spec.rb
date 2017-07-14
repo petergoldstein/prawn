@@ -502,6 +502,7 @@ describe Prawn::Document do
 
     it 'is idempotent' do
       pdf = described_class.new
+
       contents = pdf.render
       contents2 = pdf.render
       expect(contents2).to eq(contents)
@@ -554,7 +555,7 @@ describe Prawn::Document do
   end
 
   describe 'content stream characteristics' do
-    it 'has 2 content streams for a single page PDF' do
+    it 'has 1 single content stream for a single page PDF' do
       pdf = described_class.new
       pdf.text 'James'
       output = StringIO.new(pdf.render)
@@ -562,10 +563,10 @@ describe Prawn::Document do
 
       streams = hash.values.select { |obj| obj.is_a?(PDF::Reader::Stream) }
 
-      expect(streams.size).to eq(2)
+      expect(streams.size).to eq(1)
     end
 
-    it 'has 2 content streams for a single page PDF, even if go_to_page '\
+    it 'has 1 single content stream for a single page PDF, even if go_to_page '\
       'is used' do
       pdf = described_class.new
       pdf.text 'James'
@@ -576,7 +577,7 @@ describe Prawn::Document do
 
       streams = hash.values.select { |obj| obj.is_a?(PDF::Reader::Stream) }
 
-      expect(streams.size).to eq(2)
+      expect(streams.size).to eq(1)
     end
   end
 
