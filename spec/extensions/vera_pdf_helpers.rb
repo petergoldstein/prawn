@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rexml/document'
 require 'open3'
 
 module VeraPdfHelpers
-  VERA_PDF_EXECUTABLE = 'verapdf'.freeze
-  VERA_PDF_COMMAND = "#{VERA_PDF_EXECUTABLE} --flavour 1b --format xml".freeze
+  VERA_PDF_EXECUTABLE = 'verapdf'
+  VERA_PDF_COMMAND = "#{VERA_PDF_EXECUTABLE} --flavour 1b --format xml"
 
   def which(cmd)
     exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
@@ -13,7 +15,7 @@ module VeraPdfHelpers
         return exe if File.executable?(exe) && !File.directory?(exe)
       end
     end
-    return nil
+    nil
   end
 
   def vera_pdf_available?
@@ -22,9 +24,9 @@ module VeraPdfHelpers
 
   def valid_pdfa_1b?(pdf_data)
     stdout, stderr, status = Open3.capture3(VERA_PDF_COMMAND, stdin_data: pdf_data)
-    raise Exception, "VeraPDF could not be run. #{stderr}" unless status.success?
+    raise StandardError, "VeraPDF could not be run. #{stderr}" unless status.success?
 
-    reported_as_compliant? stdout.lines[4..-1].join
+    reported_as_compliant? stdout.lines[4..].join
   end
 
   def reported_as_compliant?(xml_data)
